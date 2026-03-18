@@ -189,15 +189,8 @@ task-manager/
 ## 👨‍💻 Author
 
 **Your Name**
-<<<<<<< HEAD
-- GitHub: [@yourusername](https://github.com/yourusername)
-- LinkedIn: [Your LinkedIn](https://linkedin.com/in/yourprofile)
-- Email: your.email@example.com
-=======
 - GitHub: LearningNerdGirl(https://github.com/LearningNerdGirl)
 - Email: theresialiem88@gmail.com
->>>>>>> f7562c2a00058e496af9028d38c36cb039cfb158
-
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
