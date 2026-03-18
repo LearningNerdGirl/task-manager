@@ -1,0 +1,299 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+      .stat-card {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-radius: 15px;
+        padding: 25px;
+        margin-bottom: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease;
+      }
+      .stat-card:hover {
+        transform: translateY(-5px);
+      }
+      .stat-card.pending {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      }
+      .stat-card.progress {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%) !important;
+        position: relative !important;
+        display: block !important;
+        visibility: visible !important;
+        z-index: 1 !important;
+        overflow: visible !important;
+        color: white !important;
+      }
+      .stat-card.progress .stat-number,
+      .stat-card.progress .stat-label,
+      .stat-card.progress i {
+        color: white !important;
+        opacity: 1 !important;
+      }
+      .stat-card.completed {
+        background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+      }
+      .stat-number {
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin: 0;
+      }
+      .stat-label {
+        font-size: 1rem;
+        opacity: 0.9;
+      }
+      .dashboard-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 40px 0;
+        margin-bottom: 30px;
+        border-radius: 0 0 20px 20px;
+      }
+      .chart-container {
+        background: white;
+        border-radius: 15px;
+        padding: 20px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        margin-bottom: 20px;
+      }
+      .quick-action-card {
+        background: white;
+        border-radius: 15px;
+        padding: 20px;
+        text-align: center;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease;
+        text-decoration: none;
+        color: inherit;
+        display: block;
+      }
+      .quick-action-card:hover {
+        transform: translateY(-5px);
+        text-decoration: none;
+        color: inherit;
+      }
+      .quick-action-card i {
+        font-size: 2rem;
+        margin-bottom: 10px;
+      }
+    </style>
+  </head>
+
+  <body class="bg-light">
+    <nav class="navbar navbar-dark bg-dark px-4">
+      <span class="navbar-brand">Task Manager</span>
+      <div>
+        <a href="board.html" class="btn btn-outline-light btn-sm me-2">Task Board</a>
+        <button onclick="logout()" class="btn btn-danger btn-sm">Logout</button>
+      </div>
+    </nav>
+
+    <div class="dashboard-header">
+      <div class="container text-center">
+        <h1 class="mb-3">Welcome to your Dashboard</h1>
+        <p class="lead mb-0">Track your progress and manage tasks efficiently</p>
+      </div>
+    </div>
+
+    <div class="container">
+      <!-- Statistics Cards -->
+      <div class="row mb-3">
+        <div class="col-md-6 mb-3">
+          <div class="stat-card">
+            <i class="bi bi-list-task mb-2" style="font-size: 2rem;"></i>
+            <p class="stat-number" id="totalTasks">0</p>
+            <p class="stat-label">Total Tasks</p>
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <div class="stat-card pending">
+            <i class="bi bi-clock mb-2" style="font-size: 2rem;"></i>
+            <p class="stat-number" id="pendingTasks">0</p>
+            <p class="stat-label">Pending</p>
+          </div>
+        </div>
+      </div>
+      <div class="row mb-4">
+        <div class="col-md-6 mb-3">
+          <div class="stat-card progress">
+            <i class="bi bi-arrow-repeat mb-2" style="font-size: 2rem;"></i>
+            <p class="stat-number" id="dashboardProgressTasks">0</p>
+            <p class="stat-label">In Progress</p>
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <div class="stat-card completed">
+            <i class="bi bi-check-circle mb-2" style="font-size: 2rem;"></i>
+            <p class="stat-number" id="completedTasks">0</p>
+            <p class="stat-label">Completed</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts and Quick Actions -->
+      <div class="row">
+        <div class="col-md-8">
+          <div class="chart-container">
+            <h5 class="mb-3">Task Overview</h5>
+            <canvas id="taskChart" width="400" height="200"></canvas>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <h5 class="mb-3">Quick Actions</h5>
+          <a href="board.html" class="quick-action-card mb-3">
+            <i class="bi bi-kanban text-primary"></i>
+            <h6>Task Board</h6>
+            <small class="text-muted">View and manage tasks</small>
+          </a>
+          <div class="quick-action-card" onclick="refreshDashboard()">
+            <i class="bi bi-arrow-clockwise text-success"></i>
+            <h6>Refresh</h6>
+            <small class="text-muted">Update statistics</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- Progress Bar -->
+      <div class="row mt-4">
+        <div class="col-12">
+          <div class="chart-container">
+            <h5 class="mb-3">Overall Progress</h5>
+            <div class="progress" style="height: 25px;">
+              <div class="progress-bar bg-danger" id="pendingProgress" style="width: 0%">0%</div>
+              <div class="progress-bar bg-warning" id="progressProgress" style="width: 0%">0%</div>
+              <div class="progress-bar bg-success" id="completedProgress" style="width: 0%">0%</div>
+            </div>
+            <div class="mt-2 text-center">
+              <small class="text-muted">
+                <span class="badge bg-danger me-2">Pending</span>
+                <span class="badge bg-warning me-2">In Progress</span>
+                <span class="badge bg-success">Completed</span>
+              </small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="app.js"></script>
+    <script>
+      let taskChart = null;
+
+      async function loadDashboardStats() {
+        try {
+          const token = localStorage.getItem("token");
+          const res = await fetch("http://localhost:5000/api/tasks", {
+            headers: {
+              "Authorization": `Bearer ${token}`
+            }
+          });
+          
+          const tasks = await res.json();
+          
+          // Calculate statistics
+          const stats = {
+            total: tasks.length,
+            pending: tasks.filter(t => t.status.toLowerCase() === 'pending').length,
+            progress: tasks.filter(t => t.status.toLowerCase() === 'in-progress' || t.status.toLowerCase() === 'in_progress').length,
+            completed: tasks.filter(t => t.status.toLowerCase() === 'completed').length
+          };
+
+          // Update stat cards
+          console.log('Updating stats:', stats);
+          document.getElementById('totalTasks').textContent = stats.total;
+          document.getElementById('pendingTasks').textContent = stats.pending;
+          
+          const progressElement = document.getElementById('dashboardProgressTasks');
+          console.log('Progress element found:', progressElement);
+          if (progressElement) {
+            progressElement.textContent = stats.progress;
+            console.log('Progress element updated to:', stats.progress);
+          } else {
+            console.error('Progress element not found!');
+          }
+          
+          document.getElementById('completedTasks').textContent = stats.completed;
+
+          // Update progress bar
+          if (stats.total > 0) {
+            const pendingPercent = (stats.pending / stats.total * 100).toFixed(1);
+            const progressPercent = (stats.progress / stats.total * 100).toFixed(1);
+            const completedPercent = (stats.completed / stats.total * 100).toFixed(1);
+            
+            document.getElementById('pendingProgress').style.width = pendingPercent + '%';
+            document.getElementById('pendingProgress').textContent = pendingPercent + '%';
+            document.getElementById('progressProgress').style.width = progressPercent + '%';
+            document.getElementById('progressProgress').textContent = progressPercent + '%';
+            document.getElementById('completedProgress').style.width = completedPercent + '%';
+            document.getElementById('completedProgress').textContent = completedPercent + '%';
+          }
+
+          // Update chart
+          updateChart(stats);
+        } catch (error) {
+          console.error('Error loading dashboard stats:', error);
+        }
+      }
+
+      function updateChart(stats) {
+        const ctx = document.getElementById('taskChart').getContext('2d');
+        
+        if (taskChart) {
+          taskChart.destroy();
+        }
+
+        taskChart = new Chart(ctx, {
+          type: 'doughnut',
+          data: {
+            labels: ['Pending', 'In Progress', 'Completed'],
+            datasets: [{
+              data: [stats.pending, stats.progress, stats.completed],
+              backgroundColor: [
+                '#f5576c',
+                '#4facfe',
+                '#43e97b'
+              ],
+              borderWidth: 0
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: 'bottom'
+              }
+            }
+          }
+        });
+      }
+
+      function refreshDashboard() {
+        loadDashboardStats();
+      }
+
+      function logout() {
+        localStorage.removeItem("token");
+        window.location.href = "login.html";
+      }
+
+      // Load dashboard stats when page loads
+      if (localStorage.getItem("token")) {
+        loadDashboardStats();
+      } else {
+        window.location.href = "login.html";
+      }
+    </script>
+  </body>
+</html>
