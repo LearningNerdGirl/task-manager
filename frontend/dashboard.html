@@ -26,19 +26,7 @@
         background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
       }
       .stat-card.progress {
-        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%) !important;
-        position: relative !important;
-        display: block !important;
-        visibility: visible !important;
-        z-index: 1 !important;
-        overflow: visible !important;
-        color: white !important;
-      }
-      .stat-card.progress .stat-number,
-      .stat-card.progress .stat-label,
-      .stat-card.progress i {
-        color: white !important;
-        opacity: 1 !important;
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
       }
       .stat-card.completed {
         background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
@@ -62,9 +50,21 @@
       .chart-container {
         background: white;
         border-radius: 15px;
-        padding: 20px;
+        padding: 15px;
         box-shadow: 0 5px 20px rgba(0,0,0,0.1);
         margin-bottom: 20px;
+        max-width: 100%;
+        height: auto;
+        min-height: 280px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+      .chart-container canvas {
+        max-width: 100%;
+        height: auto !important;
+        max-height: 250px;
       }
       .quick-action-card {
         background: white;
@@ -142,13 +142,13 @@
 
       <!-- Charts and Quick Actions -->
       <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-6">
           <div class="chart-container">
-            <h5 class="mb-3">Task Overview</h5>
-            <canvas id="taskChart" width="400" height="200"></canvas>
+            <h5 class="mb-2">Task Overview</h5>
+            <canvas id="taskChart"></canvas>
           </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-6">
           <h5 class="mb-3">Quick Actions</h5>
           <a href="board.html" class="quick-action-card mb-3">
             <i class="bi bi-kanban text-primary"></i>
