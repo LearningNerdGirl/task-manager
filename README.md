@@ -17,9 +17,6 @@ A personal task management application designed to help users organize their wor
 
 **Ideal for:** Developers, students, freelancers, or anyone needing a simple yet effective task tracker.
 
-![Task Manager Screenshot](./screenshot.png)
->>>>>>> f7562c2a00058e496af9028d38c36cb039cfb158
-
 ## ✨ Features
 
 - 🔐 **Authentication System** - Secure JWT-based login and registration
