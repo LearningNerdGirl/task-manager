@@ -14,7 +14,7 @@ A personal task management application designed to help users organize their wor
 
 **Ideal for:** Developers, students, freelancers, or anyone needing a simple yet effective task tracker.
 
-![Task Manager Screenshot](screenshot.png)
+![Task Manager Screenshot](./screenshot.png)
 
 ## ✨ Features
 
