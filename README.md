@@ -2,6 +2,18 @@
 
 A modern, full-stack task management application built with Node.js, MySQL, and vanilla JavaScript. Features a beautiful Kanban board interface, drag-and-drop functionality, and real-time task tracking.
 
+## 📖 What is this?
+
+A personal task management application designed to help users organize their work with a visual Kanban board. Built as a portfolio project to showcase full-stack development skills including:
+
+- RESTful API design with Node.js/Express
+- Database management with MySQL
+- Modern frontend development with vanilla JavaScript
+- UI/UX design with responsive layouts
+- Authentication & security implementation
+
+**Ideal for:** Developers, students, freelancers, or anyone needing a simple yet effective task tracker.
+
 ![Task Manager Screenshot](screenshot.png)
 
 ## ✨ Features
