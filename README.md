@@ -2,7 +2,7 @@
 
 A modern, full-stack task management application built with Node.js, MySQL, and vanilla JavaScript. Features a beautiful Kanban board interface, drag-and-drop functionality, and real-time task tracking.
 
-![Task Manager Screenshot](screenshot.png)
+![Task Manager Screenshot](Dashboard.png)
 
 ## ✨ Features
 
