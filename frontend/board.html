@@ -9,6 +9,213 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    
+    <style>
+      body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      }
+      
+      .navbar {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+      }
+      
+      .kanban-column {
+        background: #f8f9fa;
+        border-radius: 16px;
+        padding: 20px;
+        min-height: 500px;
+        height: 100%;
+      }
+      
+      .kanban-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 16px;
+        padding-bottom: 12px;
+        border-bottom: 2px solid;
+      }
+      
+      .kanban-header.pending {
+        border-color: #f093fb;
+      }
+      
+      .kanban-header.progress {
+        border-color: #4facfe;
+      }
+      
+      .kanban-header.completed {
+        border-color: #43e97b;
+      }
+      
+      .kanban-title {
+        font-weight: 600;
+        font-size: 1.1rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      
+      .kanban-count {
+        background: white;
+        border-radius: 20px;
+        padding: 4px 12px;
+        font-size: 0.875rem;
+        font-weight: 600;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      }
+      
+      .task-card {
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 16px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.07);
+        transition: all 0.25s ease;
+        cursor: grab;
+        border: 1px solid #e2e8f0;
+        position: relative;
+        overflow: hidden;
+      }
+      
+      .task-card::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 4px;
+        background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+      }
+      
+      .task-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+        border-color: #cbd5e0;
+      }
+      
+      .task-card:active {
+        cursor: grabbing;
+      }
+      
+      .task-title {
+        font-weight: 700;
+        font-size: 1.1rem;
+        margin-bottom: 6px;
+        color: #1a202c;
+        line-height: 1.3;
+      }
+      
+      .task-desc {
+        font-size: 0.9rem;
+        color: #4a5568;
+        margin-bottom: 14px;
+        line-height: 1.5;
+      }
+      
+      .task-meta {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      
+      .priority-badge {
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 0.7rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+      }
+      
+      .priority-high {
+        background: linear-gradient(135deg, #fc8181 0%, #f56565 100%);
+        color: white;
+      }
+      
+      .priority-medium {
+        background: linear-gradient(135deg, #f6e05e 0%, #ecc94b 100%);
+        color: #744210;
+      }
+      
+      .priority-low {
+        background: linear-gradient(135deg, #68d391 0%, #48bb78 100%);
+        color: white;
+      }
+      
+      .task-actions {
+        display: flex;
+        gap: 8px;
+      }
+      
+      .btn-action {
+        width: 36px;
+        height: 36px;
+        padding: 0;
+        border: none;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      
+      .btn-edit {
+        background: #edf2f7;
+        color: #4a5568;
+      }
+      
+      .btn-edit:hover {
+        background: #e2e8f0;
+        transform: scale(1.05);
+      }
+      
+      .btn-delete {
+        background: #fed7d7;
+        color: #c53030;
+      }
+      
+      .btn-delete:hover {
+        background: #fc8181;
+        color: white;
+        transform: scale(1.05);
+      }
+      
+      .due-date {
+        display: flex;
+        align-items: center;
+        font-size: 0.85rem;
+        color: #718096;
+        margin-top: 10px;
+        padding-top: 10px;
+        border-top: 1px dashed #e2e8f0;
+      }
+      
+      .empty-state i {
+        font-size: 3rem;
+        margin-bottom: 12px;
+        display: block;
+      }
+      
+      .btn-add-task {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-weight: 600;
+      }
+      
+      .btn-add-task:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+      }
+    </style>
   </head>
 
   <body class="bg-light">
@@ -28,34 +235,73 @@
     <div class="container mt-4">
       <!-- HEADER + ADD BUTTON -->
 
-      <div class="d-flex justify-content-between mb-3">
-        <h4>Your Tasks</h4>
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+          <h4 class="mb-1">Your Tasks</h4>
+          <p class="text-muted mb-0">Drag and drop to organize</p>
+        </div>
 
         <button
-          class="btn btn-primary"
+          class="btn btn-primary btn-add-task"
           data-bs-toggle="modal"
           data-bs-target="#taskModal"
         >
-          + Add Task
+          <i class="bi bi-plus-lg me-1"></i> Add Task
         </button>
       </div>
 
       <!-- KANBAN BOARD -->
 
-      <div class="row">
+      <div class="row align-items-start">
         <div class="col-md-4">
-          <h5>Pending</h5>
-          <ul id="pendingTasks" class="list-group"></ul>
+          <div class="kanban-column">
+            <div class="kanban-header pending">
+              <div class="kanban-title">
+                <i class="bi bi-clock"></i>
+                <span>Pending</span>
+              </div>
+              <span class="kanban-count" id="pendingCount">0</span>
+            </div>
+            <ul id="pendingTasks" class="list-group"></ul>
+            <div class="empty-state" id="pendingEmpty">
+              <i class="bi bi-inbox"></i>
+              <p>No pending tasks</p>
+            </div>
+          </div>
         </div>
 
         <div class="col-md-4">
-          <h5>In Progress</h5>
-          <ul id="progressTasks" class="list-group"></ul>
+          <div class="kanban-column">
+            <div class="kanban-header progress">
+              <div class="kanban-title">
+                <i class="bi bi-arrow-repeat"></i>
+                <span>In Progress</span>
+              </div>
+              <span class="kanban-count" id="progressCount">0</span>
+            </div>
+            <ul id="progressTasks" class="list-group"></ul>
+            <div class="empty-state" id="progressEmpty">
+              <i class="bi bi-arrow-clockwise"></i>
+              <p>No tasks in progress</p>
+            </div>
+          </div>
         </div>
 
         <div class="col-md-4">
-          <h5>Completed</h5>
-          <ul id="completedTasks" class="list-group"></ul>
+          <div class="kanban-column">
+            <div class="kanban-header completed">
+              <div class="kanban-title">
+                <i class="bi bi-check-circle"></i>
+                <span>Completed</span>
+              </div>
+              <span class="kanban-count" id="completedCount">0</span>
+            </div>
+            <ul id="completedTasks" class="list-group"></ul>
+            <div class="empty-state" id="completedEmpty">
+              <i class="bi bi-check-all"></i>
+              <p>No completed tasks</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -65,33 +311,64 @@
     <div class="modal fade" id="taskModal">
       <div class="modal-dialog">
         <div class="modal-content">
-          <div class="modal-header">
-            <h5>Add Task</h5>
+          <div class="modal-header bg-light">
+            <h5 class="modal-title"><i class="bi bi-plus-circle me-2"></i>Add New Task</h5>
             <button class="btn-close" data-bs-dismiss="modal"></button>
           </div>
 
           <div class="modal-body">
             <form id="taskForm">
-              <input
-                class="form-control mb-2"
-                id="title"
-                placeholder="Task title"
-                required
-              />
+              <div class="mb-3">
+                <label class="form-label">Task Title</label>
+                <input
+                  class="form-control"
+                  id="title"
+                  placeholder="Enter task title"
+                  required
+                />
+              </div>
 
-              <input
-                class="form-control mb-2"
-                id="description"
-                placeholder="Description"
-              />
+              <div class="mb-3">
+                <label class="form-label">Description</label>
+                <textarea
+                  class="form-control"
+                  id="description"
+                  placeholder="Enter task description"
+                  rows="3"
+                ></textarea>
+              </div>
 
-              <select class="form-control mb-2" id="status">
-                <option value="pending">Pending</option>
-                <option value="in-progress">In Progress</option>
-                <option value="completed">Completed</option>
-              </select>
+              <div class="row">
+                <div class="col-6">
+                  <div class="mb-3">
+                    <label class="form-label">Status</label>
+                    <select class="form-select" id="status">
+                      <option value="pending">⏳ Pending</option>
+                      <option value="in-progress">🔄 In Progress</option>
+                      <option value="completed">✅ Completed</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="mb-3">
+                    <label class="form-label">Priority</label>
+                    <select class="form-select" id="priority">
+                      <option value="low">🟢 Low</option>
+                      <option value="medium" selected>🟡 Medium</option>
+                      <option value="high">🔴 High</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
 
-              <button class="btn btn-primary w-100">Add Task</button>
+              <div class="mb-3">
+                <label class="form-label">Due Date</label>
+                <input type="date" class="form-control" id="dueDate" />
+              </div>
+
+              <button class="btn btn-primary w-100">
+                <i class="bi bi-plus-lg me-1"></i> Create Task
+              </button>
             </form>
           </div>
         </div>
@@ -103,8 +380,8 @@
     <div class="modal fade" id="editModal">
       <div class="modal-dialog">
         <div class="modal-content">
-          <div class="modal-header">
-            <h5>Edit Task</h5>
+          <div class="modal-header bg-light">
+            <h5 class="modal-title"><i class="bi bi-pencil-square me-2"></i>Edit Task</h5>
             <button class="btn-close" data-bs-dismiss="modal"></button>
           </div>
 
@@ -112,25 +389,56 @@
             <form id="editForm">
               <input type="hidden" id="editId" />
 
-              <input
-                class="form-control mb-2"
-                id="editTitle"
-                placeholder="Task title"
-              />
+              <div class="mb-3">
+                <label class="form-label">Task Title</label>
+                <input
+                  class="form-control"
+                  id="editTitle"
+                  placeholder="Enter task title"
+                />
+              </div>
 
-              <input
-                class="form-control mb-2"
-                id="editDescription"
-                placeholder="Description"
-              />
+              <div class="mb-3">
+                <label class="form-label">Description</label>
+                <textarea
+                  class="form-control"
+                  id="editDescription"
+                  placeholder="Enter task description"
+                  rows="3"
+                ></textarea>
+              </div>
 
-              <select class="form-control mb-2" id="editStatus">
-                <option value="pending">Pending</option>
-                <option value="in-progress">In Progress</option>
-                <option value="completed">Completed</option>
-              </select>
+              <div class="row">
+                <div class="col-6">
+                  <div class="mb-3">
+                    <label class="form-label">Status</label>
+                    <select class="form-select" id="editStatus">
+                      <option value="pending">⏳ Pending</option>
+                      <option value="in-progress">🔄 In Progress</option>
+                      <option value="completed">✅ Completed</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="mb-3">
+                    <label class="form-label">Priority</label>
+                    <select class="form-select" id="editPriority">
+                      <option value="low">🟢 Low</option>
+                      <option value="medium">🟡 Medium</option>
+                      <option value="high">🔴 High</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
 
-              <button type="submit" class="btn btn-warning w-100">Update Task</button>
+              <div class="mb-3">
+                <label class="form-label">Due Date</label>
+                <input type="date" class="form-control" id="editDueDate" />
+              </div>
+
+              <button type="submit" class="btn btn-primary w-100">
+                <i class="bi bi-check-lg me-1"></i> Update Task
+              </button>
             </form>
           </div>
         </div>

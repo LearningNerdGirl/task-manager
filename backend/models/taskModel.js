@@ -5,18 +5,18 @@ function getAllTasks(callback) {
   db.query(sql, callback);
 }
 
-function createTask(title, description, callback) {
-  const sql = "INSERT INTO tasks (title, description) VALUES (?, ?)";
-  db.query(sql, [title, description], callback);
+function createTask(title, description, status, priority, dueDate, callback) {
+  const sql = "INSERT INTO tasks (title, description, status, priority, dueDate) VALUES (?, ?, ?, ?, ?)";
+  db.query(sql, [title, description, status, priority, dueDate], callback);
 }
 
-function updateTask(id, title, description, status, callback) {
+function updateTask(id, title, description, status, priority, dueDate, callback) {
   const sql = `
     UPDATE tasks 
-    SET title=?, description=?, status=? 
+    SET title=?, description=?, status=?, priority=?, dueDate=? 
     WHERE id=?`;
     
-  db.query(sql, [title, description, status, id], callback);
+  db.query(sql, [title, description, status, priority, dueDate, id], callback);
 }
 
 function deleteTask(id, callback) {

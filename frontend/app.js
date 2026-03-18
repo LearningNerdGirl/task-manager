@@ -35,73 +35,113 @@ const pending = document.getElementById("pendingTasks");
 const progress = document.getElementById("progressTasks");
 const completed = document.getElementById("completedTasks");
 
+const pendingEmpty = document.getElementById("pendingEmpty");
+const progressEmpty = document.getElementById("progressEmpty");
+const completedEmpty = document.getElementById("completedEmpty");
+
+const pendingCount = document.getElementById("pendingCount");
+const progressCount = document.getElementById("progressCount");
+const completedCount = document.getElementById("completedCount");
+
 pending.innerHTML = "";
 progress.innerHTML = "";
 completed.innerHTML = "";
+
+let pendingTasksCount = 0;
+let progressTasksCount = 0;
+let completedTasksCount = 0;
 
 tasks.forEach(task => {
 
 const li = document.createElement("li");
 
-li.className = "list-group-item";
+li.className = "task-card";
 
 li.dataset.id = task.id;
 
+const priority = task.priority || 'medium';
+const dueDate = task.dueDate ? new Date(task.dueDate).toLocaleDateString('id-ID', {day: 'numeric', month: 'short'}) : '';
+
 li.innerHTML = `
-<strong>${task.title}</strong>
-<div class="small text-muted">${task.description}</div>
-<div class="mt-2">
-<button class="btn btn-sm btn-warning me-1" onclick="editTask(${task.id})">Edit</button>
-<button class="btn btn-sm btn-danger" onclick="deleteTask(${task.id})">Delete</button>
-</div>`;
+<div class="task-title">${task.title}</div>
+${task.description ? `<div class="task-desc">${task.description}</div>` : ''}
+<div class="task-meta">
+  <span class="priority-badge priority-${priority}">${priority}</span>
+  <div class="task-actions">
+    <button class="btn-action btn-edit" onclick="editTask(${task.id})" title="Edit">
+      <i class="bi bi-pencil"></i>
+    </button>
+    <button class="btn-action btn-delete" onclick="deleteTask(${task.id})" title="Delete">
+      <i class="bi bi-trash"></i>
+    </button>
+  </div>
+</div>
+${dueDate ? `<div class="due-date"><i class="bi bi-calendar3 me-2"></i>${dueDate}</div>` : ''}`;
 
 const status = task.status.toLowerCase();
 
 if(status === "pending"){
   pending.appendChild(li);
+  pendingTasksCount++;
 }
 
 else if(status === "in-progress" || status === "in_progress"){
   progress.appendChild(li);
+  progressTasksCount++;
 }
 
 else if(status === "completed"){
   completed.appendChild(li);
+  completedTasksCount++;
 }
 
 console.log("STATUS FROM DB:", task.status);
 });
 
+// Update counters
+pendingCount.textContent = pendingTasksCount;
+progressCount.textContent = progressTasksCount;
+completedCount.textContent = completedTasksCount;
+
+// Show/hide empty states
+pendingEmpty.style.display = pendingTasksCount === 0 ? 'block' : 'none';
+progressEmpty.style.display = progressTasksCount === 0 ? 'block' : 'none';
+completedEmpty.style.display = completedTasksCount === 0 ? 'block' : 'none';
+
 }
 
 form.addEventListener("submit", async (e) => {
 
-e.preventDefault();
+  e.preventDefault();
 
-const title = document.getElementById("title").value;
-const description = document.getElementById("description").value;
-const status = document.getElementById("status").value.toLowerCase();
+  const title = document.getElementById("title").value;
+  const description = document.getElementById("description").value;
+  const status = document.getElementById("status").value.toLowerCase();
+  const priority = document.getElementById("priority").value;
+  const dueDate = document.getElementById("dueDate").value;
 
-console.log(title, description, status);
+  console.log(title, description, status, priority, dueDate);
 
-await fetch(API_URL,{
-method:"POST",
-headers:{
-"Content-Type":"application/json",
-"Authorization": `Bearer ${token}`
-},
-body:JSON.stringify({
-title,
-description,
-status
-})
-});
+  await fetch(API_URL,{
+    method:"POST",
+    headers:{
+      "Content-Type":"application/json",
+      "Authorization": `Bearer ${token}`
+    },
+    body:JSON.stringify({
+      title,
+      description,
+      status,
+      priority,
+      dueDate
+    })
+  });
 
-form.reset();
-const modal = bootstrap.Modal.getInstance(document.getElementById("taskModal"));
-modal.hide();
-enableDrag();
-loadTasks();
+  form.reset();
+  const modal = bootstrap.Modal.getInstance(document.getElementById("taskModal"));
+  modal.hide();
+  enableDrag();
+  loadTasks();
 
 });
 
@@ -113,6 +153,8 @@ editForm.addEventListener("submit", async (e) => {
   const title = document.getElementById("editTitle").value;
   const description = document.getElementById("editDescription").value;
   const status = document.getElementById("editStatus").value.toLowerCase();
+  const priority = document.getElementById("editPriority").value;
+  const dueDate = document.getElementById("editDueDate").value;
 
   await fetch(`${API_URL}/${id}`, {
     method: "PUT",
@@ -123,7 +165,9 @@ editForm.addEventListener("submit", async (e) => {
     body: JSON.stringify({
       title,
       description,
-      status
+      status,
+      priority,
+      dueDate
     })
   });
 
@@ -155,6 +199,8 @@ document.getElementById("editId").value = task.id;
 document.getElementById("editTitle").value = task.title;
 document.getElementById("editDescription").value = task.description;
 document.getElementById("editStatus").value = task.status;
+document.getElementById("editPriority").value = task.priority || 'medium';
+document.getElementById("editDueDate").value = task.dueDate || '';
 
 const modal = new bootstrap.Modal(document.getElementById("editModal"));
 modal.show();

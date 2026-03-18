@@ -14,10 +14,31 @@
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         color: white;
         border-radius: 15px;
-        padding: 25px;
+        padding: 20px;
         margin-bottom: 20px;
         box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         transition: transform 0.3s ease;
+        height: 160px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        text-align: left;
+      }
+      .stat-card i {
+        margin-bottom: 10px;
+        font-size: 2rem;
+      }
+      .stat-number {
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin: 0;
+        line-height: 1;
+      }
+      .stat-label {
+        font-size: 1rem;
+        opacity: 0.9;
+        margin-top: 5px;
       }
       .stat-card:hover {
         transform: translateY(-5px);
@@ -30,15 +51,6 @@
       }
       .stat-card.completed {
         background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-      }
-      .stat-number {
-        font-size: 2.5rem;
-        font-weight: bold;
-        margin: 0;
-      }
-      .stat-label {
-        font-size: 1rem;
-        opacity: 0.9;
       }
       .dashboard-header {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -54,8 +66,8 @@
         box-shadow: 0 5px 20px rgba(0,0,0,0.1);
         margin-bottom: 20px;
         max-width: 100%;
-        height: auto;
-        min-height: 280px;
+        height: 100%;
+        min-height: 320px;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -143,22 +155,24 @@
       <!-- Charts and Quick Actions -->
       <div class="row">
         <div class="col-md-6">
-          <div class="chart-container">
+          <div class="chart-container h-100 d-flex flex-column justify-content-center">
             <h5 class="mb-2">Task Overview</h5>
             <canvas id="taskChart"></canvas>
           </div>
         </div>
         <div class="col-md-6">
-          <h5 class="mb-3">Quick Actions</h5>
-          <a href="board.html" class="quick-action-card mb-3">
-            <i class="bi bi-kanban text-primary"></i>
-            <h6>Task Board</h6>
-            <small class="text-muted">View and manage tasks</small>
-          </a>
-          <div class="quick-action-card" onclick="refreshDashboard()">
-            <i class="bi bi-arrow-clockwise text-success"></i>
-            <h6>Refresh</h6>
-            <small class="text-muted">Update statistics</small>
+          <div class="h-100 d-flex flex-column justify-content-center">
+            <h5 class="mb-3">Quick Actions</h5>
+            <a href="board.html" class="quick-action-card mb-3">
+              <i class="bi bi-kanban text-primary"></i>
+              <h6>Task Board</h6>
+              <small class="text-muted">View and manage tasks</small>
+            </a>
+            <div class="quick-action-card" onclick="refreshDashboard()">
+              <i class="bi bi-arrow-clockwise text-success"></i>
+              <h6>Refresh</h6>
+              <small class="text-muted">Update statistics</small>
+            </div>
           </div>
         </div>
       </div>

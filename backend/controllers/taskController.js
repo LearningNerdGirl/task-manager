@@ -16,11 +16,11 @@ exports.getTasks = (req, res) => {
 
 // CREATE
 exports.createTask = (req, res) => {
-  const { title, description, status } = req.body;
+  const { title, description, status, priority, dueDate } = req.body;
   const userId = req.userId;
   db.query(
-    "INSERT INTO tasks (title, description, status, user_id) VALUES (?, ?, ?, ?)",
-    [title, description, status, userId],
+    "INSERT INTO tasks (title, description, status, priority, dueDate, user_id) VALUES (?, ?, ?, ?, ?, ?)",
+    [title, description, status, priority, dueDate, userId],
     (err) => {
       if (err) return res.status(500).json(err);
       res.json({ message: "Task created" });
@@ -31,19 +31,21 @@ exports.createTask = (req, res) => {
 // UPDATE
 exports.updateTask = (req, res) => {
   const { id } = req.params;
-  const { title, description, status } = req.body;
+  const { title, description, status, priority, dueDate } = req.body;
   const userId = req.userId;
   const query = `
     UPDATE tasks 
     SET 
       title = COALESCE(?, title),
       description = COALESCE(?, description),
-      status = COALESCE(?, status)
+      status = COALESCE(?, status),
+      priority = COALESCE(?, priority),
+      dueDate = COALESCE(?, dueDate)
     WHERE id = ? AND user_id = ?
   `;
   db.query(
     query,
-    [title, description, status, id, userId],
+    [title, description, status, priority, dueDate, id, userId],
     (err) => {
       if (err) return res.status(500).json(err);
       res.json({ message: "Task updated" });
