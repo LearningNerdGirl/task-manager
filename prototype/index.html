@@ -1,0 +1,1379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Task Manager - Wireframe Prototype</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0d1117;
+      color: #c9d1d9;
+      overflow-x: hidden;
+    }
+
+    /* ===== SIDEBAR ===== */
+    .sidebar {
+      position: fixed;
+      left: 0; top: 0; bottom: 0;
+      width: 260px;
+      background: #161b22;
+      border-right: 1px solid #30363d;
+      padding: 24px 0;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar-logo {
+      padding: 0 24px 24px;
+      border-bottom: 1px solid #30363d;
+      margin-bottom: 16px;
+    }
+
+    .sidebar-logo h2 {
+      font-size: 1.1rem;
+      color: #58a6ff;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    .sidebar-logo span {
+      font-size: 0.75rem;
+      color: #8b949e;
+      display: block;
+      margin-top: 4px;
+    }
+
+    .sidebar-section {
+      padding: 8px 16px;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #8b949e;
+      font-weight: 600;
+    }
+
+    .sidebar-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 24px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 0.85rem;
+      color: #8b949e;
+      border-left: 3px solid transparent;
+    }
+
+    .sidebar-item:hover {
+      background: rgba(88, 166, 255, 0.05);
+      color: #c9d1d9;
+    }
+
+    .sidebar-item.active {
+      background: rgba(88, 166, 255, 0.1);
+      color: #58a6ff;
+      border-left-color: #58a6ff;
+      font-weight: 600;
+    }
+
+    .sidebar-item svg {
+      width: 18px; height: 18px;
+      flex-shrink: 0;
+    }
+
+    .sidebar-footer {
+      margin-top: auto;
+      padding: 16px 24px;
+      border-top: 1px solid #30363d;
+    }
+
+    .sidebar-footer p {
+      font-size: 0.7rem;
+      color: #484f58;
+    }
+
+    /* ===== MAIN CONTENT ===== */
+    .main {
+      margin-left: 260px;
+      padding: 0;
+      min-height: 100vh;
+    }
+
+    /* ===== TOP BAR ===== */
+    .topbar {
+      position: sticky;
+      top: 0;
+      background: rgba(13, 17, 23, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid #30363d;
+      padding: 16px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 50;
+    }
+
+    .topbar h1 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #f0f6fc;
+    }
+
+    .topbar-meta {
+      font-size: 0.75rem;
+      color: #8b949e;
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .topbar-badge {
+      background: #1f6feb;
+      color: white;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 0.7rem;
+      font-weight: 600;
+    }
+
+    /* ===== SCREEN SECTIONS ===== */
+    .screen-section {
+      padding: 48px 40px;
+      border-bottom: 1px solid #21262d;
+      display: none;
+    }
+
+    .screen-section.active {
+      display: block;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 32px;
+    }
+
+    .section-title {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #58a6ff;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .section-desc {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #f0f6fc;
+      line-height: 1.3;
+    }
+
+    .section-subdesc {
+      font-size: 0.9rem;
+      color: #8b949e;
+      margin-top: 8px;
+      max-width: 600px;
+      line-height: 1.6;
+    }
+
+    /* ===== WIREFRAME FRAME ===== */
+    .wireframe-container {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 16px 48px rgba(0,0,0,0.3);
+    }
+
+    .wireframe-browser {
+      background: #21262d;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid #30363d;
+    }
+
+    .browser-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+    }
+
+    .browser-dot.red { background: #f85149; }
+    .browser-dot.yellow { background: #e3b341; }
+    .browser-dot.green { background: #3fb950; }
+
+    .browser-url {
+      flex: 1;
+      background: #0d1117;
+      border-radius: 6px;
+      padding: 6px 14px;
+      font-size: 0.75rem;
+      color: #8b949e;
+      margin-left: 8px;
+    }
+
+    .wireframe-content {
+      padding: 0;
+      min-height: 500px;
+      position: relative;
+    }
+
+    /* ===== ANNOTATIONS ===== */
+    .annotation {
+      position: absolute;
+      background: #1f6feb;
+      color: white;
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 4px;
+      white-space: nowrap;
+      z-index: 20;
+      box-shadow: 0 2px 8px rgba(31, 111, 235, 0.3);
+    }
+
+    .annotation::before {
+      content: '';
+      position: absolute;
+      width: 0; height: 0;
+    }
+
+    .annotation.left::before {
+      right: -6px;
+      top: 50%;
+      transform: translateY(-50%);
+      border-top: 6px solid transparent;
+      border-bottom: 6px solid transparent;
+      border-left: 6px solid #1f6feb;
+    }
+
+    .annotation.bottom::before {
+      left: 50%;
+      top: -6px;
+      transform: translateX(-50%);
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+      border-bottom: 6px solid #1f6feb;
+    }
+
+    .annotation.right::before {
+      left: -6px;
+      top: 50%;
+      transform: translateY(-50%);
+      border-top: 6px solid transparent;
+      border-bottom: 6px solid transparent;
+      border-right: 6px solid #1f6feb;
+    }
+
+    /* ===== LOGIN WIREFRAME ===== */
+    .wf-login {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 500px;
+      background: linear-gradient(135deg, #0d1117 0%, #161b22 100%);
+      padding: 40px;
+    }
+
+    .wf-login-card {
+      background: #21262d;
+      border: 1px solid #30363d;
+      border-radius: 16px;
+      padding: 40px;
+      width: 380px;
+      position: relative;
+    }
+
+    .wf-login-card h3 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #f0f6fc;
+      margin-bottom: 6px;
+    }
+
+    .wf-login-card p {
+      font-size: 0.8rem;
+      color: #8b949e;
+      margin-bottom: 24px;
+    }
+
+    .wf-input {
+      display: block;
+      width: 100%;
+      background: #0d1117;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      padding: 12px 14px;
+      color: #c9d1d9;
+      font-size: 0.85rem;
+      margin-bottom: 14px;
+      outline: none;
+    }
+
+    .wf-input:focus {
+      border-color: #58a6ff;
+      box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.1);
+    }
+
+    .wf-input-label {
+      display: block;
+      font-size: 0.75rem;
+      color: #8b949e;
+      margin-bottom: 6px;
+      font-weight: 500;
+    }
+
+    .wf-btn {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .wf-btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+
+    .wf-btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
+    }
+
+    .wf-link {
+      text-align: center;
+      margin-top: 16px;
+      font-size: 0.8rem;
+      color: #8b949e;
+    }
+
+    .wf-link a {
+      color: #58a6ff;
+      text-decoration: none;
+    }
+
+    /* ===== DASHBOARD WIREFRAME ===== */
+    .wf-dash {
+      background: #f1f5f9;
+      min-height: 500px;
+    }
+
+    .wf-dash-nav {
+      background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .wf-dash-nav span {
+      color: white;
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+
+    .wf-dash-nav-btns {
+      display: flex;
+      gap: 8px;
+    }
+
+    .wf-nav-btn {
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      border: none;
+      cursor: pointer;
+    }
+
+    .wf-nav-btn.outline {
+      background: rgba(255,255,255,0.1);
+      color: white;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .wf-nav-btn.danger {
+      background: linear-gradient(135deg, #fc8181, #f56565);
+      color: white;
+    }
+
+    .wf-dash-header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 32px 24px;
+      text-align: center;
+      color: white;
+    }
+
+    .wf-dash-header h2 {
+      font-size: 1.3rem;
+      font-weight: 700;
+    }
+
+    .wf-dash-header p {
+      font-size: 0.8rem;
+      opacity: 0.8;
+      margin-top: 4px;
+    }
+
+    .wf-dash-body {
+      padding: 24px;
+    }
+
+    .wf-stat-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .wf-stat-card {
+      border-radius: 12px;
+      padding: 20px;
+      color: white;
+      position: relative;
+    }
+
+    .wf-stat-card.total { background: linear-gradient(135deg, #667eea, #764ba2); }
+    .wf-stat-card.pending { background: linear-gradient(135deg, #f093fb, #f5576c); }
+    .wf-stat-card.progress { background: linear-gradient(135deg, #4facfe, #00f2fe); }
+    .wf-stat-card.completed-card { background: linear-gradient(135deg, #43e97b, #38f9d7); }
+
+    .wf-stat-icon {
+      font-size: 1.4rem;
+      margin-bottom: 8px;
+    }
+
+    .wf-stat-num {
+      font-size: 1.8rem;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .wf-stat-label {
+      font-size: 0.75rem;
+      opacity: 0.9;
+      margin-top: 4px;
+    }
+
+    .wf-dash-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .wf-chart-box, .wf-quick-box {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+
+    .wf-chart-box h4, .wf-quick-box h4 {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #1a202c;
+      margin-bottom: 16px;
+    }
+
+    .wf-donut {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      background: conic-gradient(#f5576c 0% 40%, #4facfe 40% 65%, #43e97b 65% 100%);
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .wf-donut::after {
+      content: '';
+      position: absolute;
+      inset: 30px;
+      border-radius: 50%;
+      background: white;
+    }
+
+    .wf-donut-legend {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .wf-legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.7rem;
+      color: #4a5568;
+    }
+
+    .wf-legend-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+    }
+
+    .wf-quick-item {
+      background: #f7fafc;
+      border-radius: 10px;
+      padding: 16px;
+      text-align: center;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: 1px solid #e2e8f0;
+    }
+
+    .wf-quick-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    .wf-quick-item-icon {
+      font-size: 1.4rem;
+      margin-bottom: 6px;
+    }
+
+    .wf-quick-item-title {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #2d3748;
+    }
+
+    .wf-quick-item-desc {
+      font-size: 0.7rem;
+      color: #718096;
+      margin-top: 2px;
+    }
+
+    /* ===== BOARD WIREFRAME ===== */
+    .wf-board {
+      background: #f1f5f9;
+      min-height: 500px;
+    }
+
+    .wf-board-body {
+      padding: 24px;
+    }
+
+    .wf-board-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .wf-board-header h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #1a202c;
+    }
+
+    .wf-board-header p {
+      font-size: 0.8rem;
+      color: #718096;
+    }
+
+    .wf-add-btn {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+
+    .wf-kanban {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .wf-kanban-col {
+      background: #e8ecf1;
+      border-radius: 14px;
+      padding: 16px;
+      min-height: 380px;
+    }
+
+    .wf-kanban-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 3px solid;
+    }
+
+    .wf-kanban-header.h-pending { border-color: #f093fb; }
+    .wf-kanban-header.h-progress { border-color: #4facfe; }
+    .wf-kanban-header.h-completed { border-color: #43e97b; }
+
+    .wf-kanban-header span {
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: #2d3748;
+    }
+
+    .wf-kanban-count {
+      background: white;
+      border-radius: 12px;
+      padding: 2px 10px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #4a5568;
+    }
+
+    .wf-task-card {
+      background: white;
+      border-radius: 10px;
+      padding: 14px;
+      margin-bottom: 10px;
+      border-left: 4px solid;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+      cursor: grab;
+      transition: all 0.2s;
+    }
+
+    .wf-task-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+    }
+
+    .wf-task-card.priority-high { border-left-color: #f56565; }
+    .wf-task-card.priority-medium { border-left-color: #ecc94b; }
+    .wf-task-card.priority-low { border-left-color: #48bb78; }
+
+    .wf-task-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #1a202c;
+      margin-bottom: 4px;
+    }
+
+    .wf-task-desc {
+      font-size: 0.75rem;
+      color: #718096;
+      margin-bottom: 10px;
+    }
+
+    .wf-task-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .wf-priority-badge {
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-size: 0.6rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .wf-priority-badge.high { background: #fed7d7; color: #c53030; }
+    .wf-priority-badge.medium { background: #fefcbf; color: #975a16; }
+    .wf-priority-badge.low { background: #c6f6d5; color: #276749; }
+
+    .wf-task-actions {
+      display: flex;
+      gap: 6px;
+    }
+
+    .wf-task-action-btn {
+      width: 28px; height: 28px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      font-size: 0.7rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .wf-task-action-btn.edit { background: #edf2f7; color: #4a5568; }
+    .wf-task-action-btn.delete { background: #fed7d7; color: #c53030; }
+
+    .wf-task-due {
+      font-size: 0.7rem;
+      color: #a0aec0;
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px dashed #e2e8f0;
+    }
+
+    /* ===== FLOW DIAGRAM ===== */
+    .flow-container {
+      position: relative;
+      padding: 40px;
+    }
+
+    .flow-grid {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 60px;
+      flex-wrap: wrap;
+    }
+
+    .flow-card {
+      background: #21262d;
+      border: 1px solid #30363d;
+      border-radius: 14px;
+      padding: 24px;
+      text-align: center;
+      width: 180px;
+      position: relative;
+      transition: all 0.3s;
+    }
+
+    .flow-card:hover {
+      border-color: #58a6ff;
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(88, 166, 255, 0.15);
+    }
+
+    .flow-icon {
+      font-size: 2rem;
+      margin-bottom: 12px;
+    }
+
+    .flow-label {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #f0f6fc;
+    }
+
+    .flow-sublabel {
+      font-size: 0.7rem;
+      color: #8b949e;
+      margin-top: 4px;
+    }
+
+    .flow-arrow {
+      color: #30363d;
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+
+    /* ===== SPECS TABLE ===== */
+    .specs-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .spec-card {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .spec-card h5 {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #58a6ff;
+      margin-bottom: 12px;
+    }
+
+    .spec-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .spec-list li {
+      font-size: 0.78rem;
+      color: #8b949e;
+      padding: 4px 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .spec-list li::before {
+      content: '>';
+      color: #3fb950;
+      font-weight: bold;
+      font-family: monospace;
+    }
+
+    /* ===== COLOR PALETTE ===== */
+    .palette-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .palette-swatch {
+      width: 80px;
+      text-align: center;
+    }
+
+    .palette-color {
+      width: 80px;
+      height: 60px;
+      border-radius: 10px;
+      margin-bottom: 6px;
+      border: 1px solid #30363d;
+    }
+
+    .palette-hex {
+      font-size: 0.65rem;
+      color: #8b949e;
+      font-family: monospace;
+    }
+
+    .palette-name {
+      font-size: 0.7rem;
+      color: #c9d1d9;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-logo">
+      <h2>Task Manager</h2>
+      <span>Wireframe Prototype v1.0</span>
+    </div>
+
+    <div class="sidebar-section">Screens</div>
+    <div class="sidebar-item active" onclick="showScreen('overview')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      Overview
+    </div>
+    <div class="sidebar-item" onclick="showScreen('login')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+      Login Page
+    </div>
+    <div class="sidebar-item" onclick="showScreen('dashboard')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Dashboard
+    </div>
+    <div class="sidebar-item" onclick="showScreen('board')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/><line x1="4" y1="10" x2="20" y2="10"/><line x1="10" y1="4" x2="10" y2="20"/></svg>
+      Kanban Board
+    </div>
+
+    <div class="sidebar-section" style="margin-top: 16px">Specs</div>
+    <div class="sidebar-item" onclick="showScreen('flow')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      User Flow
+    </div>
+    <div class="sidebar-item" onclick="showScreen('specs')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      Design Specs
+    </div>
+
+    <div class="sidebar-footer">
+      <p>Created with Cascade AI</p>
+      <p style="margin-top: 4px">Task Manager App &copy; 2026</p>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="topbar">
+      <h1>Task Manager - Wireframe Prototype</h1>
+      <div class="topbar-meta">
+        <span class="topbar-badge">Interactive</span>
+        <span>4 Screens | 1 User Flow | Design Specs</span>
+      </div>
+    </div>
+
+    <!-- OVERVIEW SCREEN -->
+    <div class="screen-section active" id="screen-overview">
+      <div class="section-header">
+        <div>
+          <div class="section-title">Project Overview</div>
+          <div class="section-desc">Task Manager App</div>
+          <div class="section-subdesc">A full-stack task management application with authentication, Kanban board, analytics dashboard, and drag-and-drop functionality.</div>
+        </div>
+      </div>
+
+      <div class="specs-grid" style="margin-bottom: 32px">
+        <div class="spec-card">
+          <h5>Frontend Stack</h5>
+          <ul class="spec-list">
+            <li>HTML5 & CSS3</li>
+            <li>Vanilla JavaScript (ES6+)</li>
+            <li>Bootstrap 5 Framework</li>
+            <li>Chart.js Analytics</li>
+            <li>SortableJS Drag & Drop</li>
+          </ul>
+        </div>
+        <div class="spec-card">
+          <h5>Backend Stack</h5>
+          <ul class="spec-list">
+            <li>Node.js Runtime</li>
+            <li>Express.js Server</li>
+            <li>MySQL Database</li>
+            <li>JWT Authentication</li>
+            <li>bcrypt Password Hashing</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="specs-grid">
+        <div class="spec-card">
+          <h5>Core Features</h5>
+          <ul class="spec-list">
+            <li>User Registration & Login</li>
+            <li>Kanban Board (3 columns)</li>
+            <li>Drag-and-Drop Tasks</li>
+            <li>Priority Levels (High/Medium/Low)</li>
+            <li>Due Date Tracking</li>
+            <li>Dashboard Analytics</li>
+          </ul>
+        </div>
+        <div class="spec-card">
+          <h5>API Endpoints</h5>
+          <ul class="spec-list">
+            <li>POST /api/auth/register</li>
+            <li>POST /api/auth/login</li>
+            <li>GET /api/tasks</li>
+            <li>POST /api/tasks</li>
+            <li>PUT /api/tasks/:id</li>
+            <li>DELETE /api/tasks/:id</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- LOGIN SCREEN -->
+    <div class="screen-section" id="screen-login">
+      <div class="section-header">
+        <div>
+          <div class="section-title">Screen 01</div>
+          <div class="section-desc">Login Page</div>
+          <div class="section-subdesc">JWT-based authentication with email and password. Redirects to Dashboard on success.</div>
+        </div>
+      </div>
+
+      <div class="wireframe-container">
+        <div class="wireframe-browser">
+          <div class="browser-dot red"></div>
+          <div class="browser-dot yellow"></div>
+          <div class="browser-dot green"></div>
+          <div class="browser-url">localhost:5500/frontend/login.html</div>
+        </div>
+        <div class="wireframe-content">
+          <div class="wf-login">
+            <div class="wf-login-card">
+              <div style="text-align:center; margin-bottom: 20px; font-size: 2.5rem;">&#128274;</div>
+              <h3 style="text-align:center">Welcome Back</h3>
+              <p style="text-align:center">Sign in to your account</p>
+
+              <label class="wf-input-label">Email Address</label>
+              <input class="wf-input" type="text" value="user@email.com" readonly />
+
+              <label class="wf-input-label">Password</label>
+              <input class="wf-input" type="password" value="password123" readonly />
+
+              <button class="wf-btn wf-btn-primary" style="margin-top: 8px">Sign In</button>
+
+              <div class="wf-link">Don't have an account? <a href="#">Register</a></div>
+
+              <!-- Annotations -->
+              <div class="annotation left" style="right: -160px; top: 30px;">JWT Token Storage</div>
+              <div class="annotation left" style="right: -200px; top: 130px;">Validated on server-side</div>
+              <div class="annotation left" style="right: -220px; top: 230px;">bcrypt hashed comparison</div>
+              <div class="annotation left" style="right: -230px; top: 330px;">Redirect to dashboard.html</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DASHBOARD SCREEN -->
+    <div class="screen-section" id="screen-dashboard">
+      <div class="section-header">
+        <div>
+          <div class="section-title">Screen 02</div>
+          <div class="section-desc">Dashboard</div>
+          <div class="section-subdesc">Analytics overview with task statistics, pie chart, progress bar, and quick actions.</div>
+        </div>
+      </div>
+
+      <div class="wireframe-container">
+        <div class="wireframe-browser">
+          <div class="browser-dot red"></div>
+          <div class="browser-dot yellow"></div>
+          <div class="browser-dot green"></div>
+          <div class="browser-url">localhost:5500/frontend/dashboard.html</div>
+        </div>
+        <div class="wireframe-content">
+          <div class="wf-dash">
+            <div class="wf-dash-nav">
+              <span>Task Manager</span>
+              <div class="wf-dash-nav-btns">
+                <button class="wf-nav-btn outline">&#128203; Task Board</button>
+                <button class="wf-nav-btn danger">&#128682; Logout</button>
+              </div>
+            </div>
+
+            <div class="wf-dash-header">
+              <h2>Welcome to your Dashboard</h2>
+              <p>Track your progress and manage tasks efficiently</p>
+            </div>
+
+            <div class="wf-dash-body">
+              <div class="wf-stat-row" style="grid-template-columns: repeat(4, 1fr);">
+                <div class="wf-stat-card total">
+                  <div class="wf-stat-icon">&#128203;</div>
+                  <div class="wf-stat-num">4</div>
+                  <div class="wf-stat-label">Total Tasks</div>
+                </div>
+                <div class="wf-stat-card pending">
+                  <div class="wf-stat-icon">&#9203;</div>
+                  <div class="wf-stat-num">2</div>
+                  <div class="wf-stat-label">Pending</div>
+                </div>
+                <div class="wf-stat-card progress">
+                  <div class="wf-stat-icon">&#128260;</div>
+                  <div class="wf-stat-num">1</div>
+                  <div class="wf-stat-label">In Progress</div>
+                </div>
+                <div class="wf-stat-card completed-card">
+                  <div class="wf-stat-icon">&#9989;</div>
+                  <div class="wf-stat-num">1</div>
+                  <div class="wf-stat-label">Completed</div>
+                </div>
+              </div>
+
+              <div class="wf-dash-grid">
+                <div class="wf-chart-box">
+                  <h4>Task Overview</h4>
+                  <div class="wf-donut"></div>
+                  <div class="wf-donut-legend">
+                    <div class="wf-legend-item"><div class="wf-legend-dot" style="background:#f5576c"></div> Pending</div>
+                    <div class="wf-legend-item"><div class="wf-legend-dot" style="background:#4facfe"></div> In Progress</div>
+                    <div class="wf-legend-item"><div class="wf-legend-dot" style="background:#43e97b"></div> Completed</div>
+                  </div>
+                </div>
+
+                <div class="wf-quick-box">
+                  <h4>Quick Actions</h4>
+                  <div class="wf-quick-item">
+                    <div class="wf-quick-item-icon">&#128203;</div>
+                    <div class="wf-quick-item-title">Task Board</div>
+                    <div class="wf-quick-item-desc">View and manage tasks</div>
+                  </div>
+                  <div class="wf-quick-item">
+                    <div class="wf-quick-item-icon">&#128260;</div>
+                    <div class="wf-quick-item-title">Refresh</div>
+                    <div class="wf-quick-item-desc">Update statistics</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BOARD SCREEN -->
+    <div class="screen-section" id="screen-board">
+      <div class="section-header">
+        <div>
+          <div class="section-title">Screen 03</div>
+          <div class="section-desc">Kanban Board</div>
+          <div class="section-subdesc">Drag-and-drop task management with priority badges, due dates, and inline actions.</div>
+        </div>
+      </div>
+
+      <div class="wireframe-container">
+        <div class="wireframe-browser">
+          <div class="browser-dot red"></div>
+          <div class="browser-dot yellow"></div>
+          <div class="browser-dot green"></div>
+          <div class="browser-url">localhost:5500/frontend/board.html</div>
+        </div>
+        <div class="wireframe-content">
+          <div class="wf-board">
+            <div class="wf-dash-nav">
+              <span>Task Board</span>
+              <div class="wf-dash-nav-btns">
+                <button class="wf-nav-btn outline">&#128200; Dashboard</button>
+                <button class="wf-nav-btn danger">&#128682; Logout</button>
+              </div>
+            </div>
+
+            <div class="wf-board-body">
+              <div class="wf-board-header">
+                <div>
+                  <h3>Your Tasks</h3>
+                  <p>Drag and drop to organize</p>
+                </div>
+                <button class="wf-add-btn">+ Add Task</button>
+              </div>
+
+              <div class="wf-kanban">
+                <!-- Pending Column -->
+                <div class="wf-kanban-col">
+                  <div class="wf-kanban-header h-pending">
+                    <span>&#9203; Pending</span>
+                    <span class="wf-kanban-count">2</span>
+                  </div>
+
+                  <div class="wf-task-card priority-high">
+                    <div class="wf-task-title">Design Homepage</div>
+                    <div class="wf-task-desc">Create responsive landing page design</div>
+                    <div class="wf-task-footer">
+                      <span class="wf-priority-badge high">HIGH</span>
+                      <div class="wf-task-actions">
+                        <button class="wf-task-action-btn edit">&#9998;</button>
+                        <button class="wf-task-action-btn delete">&#128465;</button>
+                      </div>
+                    </div>
+                    <div class="wf-task-due">&#128197; 20 Mar</div>
+                  </div>
+
+                  <div class="wf-task-card priority-medium">
+                    <div class="wf-task-title">Setup Database</div>
+                    <div class="wf-task-desc">Configure MySQL tables</div>
+                    <div class="wf-task-footer">
+                      <span class="wf-priority-badge medium">MEDIUM</span>
+                      <div class="wf-task-actions">
+                        <button class="wf-task-action-btn edit">&#9998;</button>
+                        <button class="wf-task-action-btn delete">&#128465;</button>
+                      </div>
+                    </div>
+                    <div class="wf-task-due">&#128197; 19 Mar</div>
+                  </div>
+                </div>
+
+                <!-- In Progress Column -->
+                <div class="wf-kanban-col">
+                  <div class="wf-kanban-header h-progress">
+                    <span>&#128260; In Progress</span>
+                    <span class="wf-kanban-count">1</span>
+                  </div>
+
+                  <div class="wf-task-card priority-medium">
+                    <div class="wf-task-title">Build REST API</div>
+                    <div class="wf-task-desc">Implement CRUD endpoints</div>
+                    <div class="wf-task-footer">
+                      <span class="wf-priority-badge medium">MEDIUM</span>
+                      <div class="wf-task-actions">
+                        <button class="wf-task-action-btn edit">&#9998;</button>
+                        <button class="wf-task-action-btn delete">&#128465;</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Completed Column -->
+                <div class="wf-kanban-col">
+                  <div class="wf-kanban-header h-completed">
+                    <span>&#9989; Completed</span>
+                    <span class="wf-kanban-count">1</span>
+                  </div>
+
+                  <div class="wf-task-card priority-low">
+                    <div class="wf-task-title">User Auth</div>
+                    <div class="wf-task-desc">JWT login & register</div>
+                    <div class="wf-task-footer">
+                      <span class="wf-priority-badge low">LOW</span>
+                      <div class="wf-task-actions">
+                        <button class="wf-task-action-btn edit">&#9998;</button>
+                        <button class="wf-task-action-btn delete">&#128465;</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- USER FLOW -->
+    <div class="screen-section" id="screen-flow">
+      <div class="section-header">
+        <div>
+          <div class="section-title">User Flow</div>
+          <div class="section-desc">Application Navigation</div>
+          <div class="section-subdesc">How users navigate through the application from login to task management.</div>
+        </div>
+      </div>
+
+      <div class="flow-container">
+        <div class="flow-grid">
+          <div class="flow-card">
+            <div class="flow-icon">&#128274;</div>
+            <div class="flow-label">Login</div>
+            <div class="flow-sublabel">Email + Password</div>
+          </div>
+          <div class="flow-arrow">&#8594;</div>
+          <div class="flow-card">
+            <div class="flow-icon">&#128200;</div>
+            <div class="flow-label">Dashboard</div>
+            <div class="flow-sublabel">Analytics Overview</div>
+          </div>
+          <div class="flow-arrow">&#8594;</div>
+          <div class="flow-card">
+            <div class="flow-icon">&#128203;</div>
+            <div class="flow-label">Task Board</div>
+            <div class="flow-sublabel">Kanban View</div>
+          </div>
+        </div>
+
+        <div class="flow-grid" style="margin-top: 40px">
+          <div class="flow-card">
+            <div class="flow-icon">&#10133;</div>
+            <div class="flow-label">Add Task</div>
+            <div class="flow-sublabel">Modal Form</div>
+          </div>
+          <div class="flow-arrow">&#8596;</div>
+          <div class="flow-card">
+            <div class="flow-icon">&#9998;</div>
+            <div class="flow-label">Edit Task</div>
+            <div class="flow-sublabel">Inline Update</div>
+          </div>
+          <div class="flow-arrow">&#8596;</div>
+          <div class="flow-card">
+            <div class="flow-icon">&#128260;</div>
+            <div class="flow-label">Drag & Drop</div>
+            <div class="flow-sublabel">Status Change</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DESIGN SPECS -->
+    <div class="screen-section" id="screen-specs">
+      <div class="section-header">
+        <div>
+          <div class="section-title">Design System</div>
+          <div class="section-desc">Design Specifications</div>
+          <div class="section-subdesc">Colors, typography, and component guidelines for the Task Manager App.</div>
+        </div>
+      </div>
+
+      <!-- Color Palette -->
+      <h4 style="font-size: 0.9rem; color: #f0f6fc; margin-bottom: 16px; font-weight: 700;">Color Palette</h4>
+      <div class="palette-row" style="margin-bottom: 32px">
+        <div class="palette-swatch">
+          <div class="palette-color" style="background: linear-gradient(135deg, #667eea, #764ba2)"></div>
+          <div class="palette-name">Primary</div>
+          <div class="palette-hex">#667eea</div>
+        </div>
+        <div class="palette-swatch">
+          <div class="palette-color" style="background: linear-gradient(135deg, #f093fb, #f5576c)"></div>
+          <div class="palette-name">Pending</div>
+          <div class="palette-hex">#f5576c</div>
+        </div>
+        <div class="palette-swatch">
+          <div class="palette-color" style="background: linear-gradient(135deg, #4facfe, #00f2fe)"></div>
+          <div class="palette-name">Progress</div>
+          <div class="palette-hex">#4facfe</div>
+        </div>
+        <div class="palette-swatch">
+          <div class="palette-color" style="background: linear-gradient(135deg, #43e97b, #38f9d7)"></div>
+          <div class="palette-name">Completed</div>
+          <div class="palette-hex">#43e97b</div>
+        </div>
+        <div class="palette-swatch">
+          <div class="palette-color" style="background: #f56565"></div>
+          <div class="palette-name">High</div>
+          <div class="palette-hex">#f56565</div>
+        </div>
+        <div class="palette-swatch">
+          <div class="palette-color" style="background: #ecc94b"></div>
+          <div class="palette-name">Medium</div>
+          <div class="palette-hex">#ecc94b</div>
+        </div>
+        <div class="palette-swatch">
+          <div class="palette-color" style="background: #48bb78"></div>
+          <div class="palette-name">Low</div>
+          <div class="palette-hex">#48bb78</div>
+        </div>
+        <div class="palette-swatch">
+          <div class="palette-color" style="background: linear-gradient(135deg, #1a202c, #2d3748)"></div>
+          <div class="palette-name">Navbar</div>
+          <div class="palette-hex">#1a202c</div>
+        </div>
+      </div>
+
+      <!-- Typography -->
+      <h4 style="font-size: 0.9rem; color: #f0f6fc; margin-bottom: 16px; font-weight: 700;">Typography</h4>
+      <div class="specs-grid" style="margin-bottom: 32px">
+        <div class="spec-card">
+          <h5>Font Family</h5>
+          <ul class="spec-list">
+            <li>Primary: Inter, sans-serif</li>
+            <li>Fallback: -apple-system, BlinkMacSystemFont</li>
+          </ul>
+        </div>
+        <div class="spec-card">
+          <h5>Font Weights</h5>
+          <ul class="spec-list">
+            <li>Regular: 400</li>
+            <li>Medium: 500</li>
+            <li>Semi-bold: 600</li>
+            <li>Bold: 700</li>
+            <li>Extra-bold: 800</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Component Specs -->
+      <h4 style="font-size: 0.9rem; color: #f0f6fc; margin-bottom: 16px; font-weight: 700;">Components</h4>
+      <div class="specs-grid">
+        <div class="spec-card">
+          <h5>Card Styles</h5>
+          <ul class="spec-list">
+            <li>Border Radius: 12px</li>
+            <li>Shadow: 0 4px 6px rgba(0,0,0,0.07)</li>
+            <li>Hover Shadow: 0 12px 24px rgba(0,0,0,0.15)</li>
+            <li>Left Border Accent: 4px</li>
+            <li>Padding: 20px</li>
+          </ul>
+        </div>
+        <div class="spec-card">
+          <h5>Button Styles</h5>
+          <ul class="spec-list">
+            <li>Border Radius: 8px</li>
+            <li>Padding: 8px 16px (nav), 10px 20px (CTA)</li>
+            <li>Hover: translateY(-1px)</li>
+            <li>Gradient: 135deg angle</li>
+            <li>Font Weight: 600</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function showScreen(screen) {
+      // Hide all sections
+      document.querySelectorAll('.screen-section').forEach(s => s.classList.remove('active'));
+      // Show target
+      document.getElementById('screen-' + screen).classList.add('active');
+
+      // Update sidebar active state
+      document.querySelectorAll('.sidebar-item').forEach(item => item.classList.remove('active'));
+      event.currentTarget.classList.add('active');
+    }
+  </script>
+</body>
+</html>
