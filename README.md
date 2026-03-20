@@ -3,8 +3,12 @@
 A modern, full-stack task management application built with Node.js, MySQL, and vanilla JavaScript. Features a beautiful Kanban board interface, drag-and-drop functionality, and real-time task tracking.
 
 
+<<<<<<< HEAD
 [🔗 View Interactive Prototype](prototype/index.html)
 
+=======
+[🔗 View Interactive Prototype][https://learningnerdgirl.github.io/task-manager/prototype/index.html]
+>>>>>>> 181f62bae14c240178c2594075313324007c1acb
 ## 📖 What is this?
 
 A personal task management application designed to help users organize their work with a visual Kanban board. Built as a portfolio project to showcase full-stack development skills including:
